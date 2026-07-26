@@ -3,21 +3,21 @@ import type { Movie } from '../types/movie';
 
 interface MoviesHttpResponse {
   results: Movie[];
+  total_pages: number;
 }
 
-export const fetchMovies = async (movieName: string): Promise<Movie[]> => {
+export const fetchMovies = async (
+  query: string,
+  page: number
+): Promise<MoviesHttpResponse> => {
   const response = await axios.get<MoviesHttpResponse>(
     'https://api.themoviedb.org/3/search/movie',
     {
-      params: {
-        query: movieName,
-      },
+      params: { query, page },
       headers: {
         Authorization: `Bearer ${import.meta.env.VITE_API_KEY}`,
       },
     }
   );
-  // console.log(response.data.results);
-
-  return response.data.results;
+  return response.data;
 };
